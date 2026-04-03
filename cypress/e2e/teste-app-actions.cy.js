@@ -32,7 +32,7 @@ describe('Login no hub de leitura', () => {
         })
     })
 
-    it.only('Deve fazer login com sucesso com usuário comúm - setando token', () => {
+    it('Deve fazer login com sucesso com usuário comúm - setando token', () => {
         let token = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJ1c3VhcmlvQHRlc3RlLmNvbSIsImlzQWRtaW4iOmZhbHNlLCJpYXQiOjE3NzUxNjYxNjMsImV4cCI6MTc3NTE5NDk2M30.jKdqmxmBymkxVXm5QRMcO-ZfPtf-7F0YrwAq86jlVv4"
         window.localStorage.setItem('authToken', token)
         cy.visit('dashboard.html')
@@ -41,9 +41,20 @@ describe('Login no hub de leitura', () => {
     });
 
     it('Deve fazer login com sucesso com usuário admin - usando comando customizado', () => {
-        cy.login(Cypress.env('ADMIN_EMAIL'), Cypress.env('ADMIN_SENHA'))
+        cy.setCookie('jwt_education_shown', 'true')
+        //cy.login(Cypress.env('ADMIN_EMAIL'), Cypress.env('ADMIN_SENHA'))
+        cy.login('admin@biblioteca.com', 'admin123')
         cy.get('h1').should('contain', 'Painel Administrativo')
+        // cy.wait(10000)
+        // cy.clearCookie('jwt_education_shown')
+        // cy.reload()
     })
+
+    it.skip('Deve mudar o idioma do site da EBAC via cookie', () => {
+        cy.visit('https://lms.ebaconline.com.br/')
+        cy.setCookie('i18n_redirected', 'en')
+        cy.reload()
+    });
 
     it('Deve fazer login com sucesso com usuário comum - usando intercept', () => {
         cy.intercept('POST', 'api/login', {
