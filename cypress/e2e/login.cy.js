@@ -3,7 +3,7 @@
 describe('Login no hub de leitura', () => {
   beforeEach(() => {
     cy.visit('login.html')
-    // cy.setCookie('jwt_education_shown', 'true')
+    cy.setCookie('jwt_education_shown', 'true')
   })
 
   it('Deve fazer login com sucesso com usuário comum - usando comando customizado', () => {
