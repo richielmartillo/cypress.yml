@@ -16,10 +16,7 @@ describe('Funcionalidade: Administrar Reservas de livros', () => {
 
             cy.visit('dashboard.html')
             cy.wait('@listarReservas')
-
         })
-
-
     });
 
 });
