@@ -59,4 +59,63 @@ describe('Funcionalidade: Catálogo de livros do usuário padrão', () => {
         })
     })
 
+    it('deve adicionar livro à cesta e atualizar o contador', () => {
+        cy.acessarCatalogoComMock()
+
+        cy.get('#cart-count').invoke('text').then((textoAntes) => {
+            const quantidadeAntes = Number(textoAntes)
+
+            cy.contains('Adicionar à Cesta').first().click()
+
+            cy.get('#global-alert-container')
+                .should('be.visible')
+                .and('contain', 'foi adicionado à cesta')
+
+            cy.get('#cart-count').should(($contador) => {
+                const quantidadeDepois = Number($contador.text())
+                expect(quantidadeDepois).to.eq(quantidadeAntes + 1)
+            })
+        })
+    })
+
+    it('deve adicionar o primeiro livro à cesta ao clicar no botão Adicionar à Cesta', () => {
+        cy.acessarCatalogoComMock()
+
+        cy.get('#cart-count').invoke('text').then((textoAntes) => {
+            const quantidadeAntes = Number(textoAntes)
+
+            cy.contains('Adicionar à Cesta').first().click()
+
+            cy.get('#global-alert-container')
+                .should('be.visible')
+                .and('contain', 'foi adicionado à cesta')
+
+            cy.get('#cart-count').should(($contador) => {
+                const quantidadeDepois = Number($contador.text())
+                expect(quantidadeDepois).to.eq(quantidadeAntes + 1)
+            })
+        })
+    })
+
+
+
+    it('deve adicionar os 3 primeiros livros à cesta', () => {
+        cy.acessarCatalogoComMock()
+
+        cy.get('#cart-count').invoke('text').then((textoAntes) => {
+            const quantidadeAntes = Number(textoAntes)
+
+            cy.get('.add-to-cart').then(($botoes) => {
+                cy.wrap($botoes[0]).click()
+                cy.wrap($botoes[1]).click()
+                cy.wrap($botoes[2]).click()
+            })
+
+            cy.get('#cart-count').should(($contador) => {
+                const quantidadeDepois = Number($contador.text())
+                expect(quantidadeDepois).to.eq(quantidadeAntes + 3)
+            })
+        })
+    })
+
 })
