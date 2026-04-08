@@ -4,16 +4,14 @@ on:
   push:
     branches: [ main ]
   pull_request:
-    branches: [ main ]
-  workflow_dispatch:
 
 jobs:
   cypress-run:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        node-version: [20.x]
+        node-version: [18.x]
 
     steps:
       - name: Checkout
@@ -24,8 +22,11 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Cypress
+        run: npx cypress install
+
       - name: Run Cypress tests
-        uses: cypress-io/github-action@v7
-        with:
-          start: npm start
-          wait-on: 'http://localhost:3000'
+        run: npx cypress run
